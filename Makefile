@@ -32,14 +32,16 @@ manext = .1
 
 srcdir := $(dir $(lastword $(MAKEFILE_LIST))) || .
 
+ANANICYD := $(DESTDIR)$(sysconfdir)/ananicy.d
+
 ANANICYD_RULES := $(shell find $(srcdir)/ananicy.d -type f -name "*.rules")
-ANANICYD_RULES_INSTALL := $(patsubst $(srcdir)/%.rules, $(DESTDIR)$(sysconfdir)/%.rules, $(ANANICYD_RULES))
+ANANICYD_RULES_INSTALL := $(patsubst $(srcdir)/%.rules, $(ANANICYD)/%.rules, $(ANANICYD_RULES))
 
 ANANICYD_TYPES := $(shell find $(srcdir)/ananicy.d -type f -name "*.types")
-ANANICYD_TYPES_INSTALL := $(patsubst $(srcdir)/%.types, $(DESTDIR)$(sysconfdir)/%.types, $(ANANICYD_TYPES))
+ANANICYD_TYPES_INSTALL := $(patsubst $(srcdir)/%.types, $(ANANICYD)/%.types, $(ANANICYD_TYPES))
 
 ANANICYD_GROUPS := $(shell find $(srcdir)/ananicy.d -type f -name "*.cgroups")
-ANANICYD_GROUPS_INSTALL := $(patsubst $(srcdir)/%.cgroups, $(DESTDIR)$(sysconfdir)/%.cgroups, $(ANANICYD_GROUPS))
+ANANICYD_GROUPS_INSTALL := $(patsubst $(srcdir)/%.cgroups, $(ANANICYD)/%.cgroups, $(ANANICYD_GROUPS))
 
 ANANICY_SERVICE := $(DESTDIR)$(libdir)/systemd/system/ananicy.service
 ANANICY_CONF := $(DESTDIR)$(sysconfdir)/ananicy.d/ananicy.conf
@@ -52,13 +54,13 @@ all: install
 
 default:  help
 
-$(DESTDIR)$(sysconfdir)/%.cgroups: $(srcdir)/%.cgroups
+$(ANANICYD)/%.cgroups: $(srcdir)/%.cgroups
 	$(INSTALL_DATA) $< $@
 
-$(DESTDIR)$(sysconfdir)/%.types: $(srcdir)/%.types
+$(ANANICYD)/%.types: $(srcdir)/%.types
 	$(INSTALL_DATA) $< $@
 
-$(DESTDIR)$(sysconfdir)/%.rules: $(srcdir)/%.rules
+$(ANANICYD)/%.rules: $(srcdir)/%.rules
 	$(INSTALL_DATA) $< $@
 
 $(ANANICY_CONF): $(srcdir)/ananicy.d/ananicy.conf
@@ -67,6 +69,11 @@ $(ANANICY_CONF): $(srcdir)/ananicy.d/ananicy.conf
 $(ANANICY_BIN): $(srcdir)/ananicy.py
 	$(INSTALL_PROGRAM) -Dm755 $< $@
 
+installdirs: mkinstalldirs
+        $(srcdir)/mkinstalldirs \
+            $(DESTDIR)$(bindir) $(DESTDIR)$(sysconfdir) \
+            $(DESTDIR)$(libdir) $(DESTDIR)$(infodir) \
+            $(DESTDIR)$(docdir) $(DESTDIR)$(mandir)
 
 .PHONY: install
 ## Install ananicy
