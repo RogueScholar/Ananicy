@@ -27,7 +27,10 @@ of rules for popular applications (anyone may add their own rule via GitHub's
 [pull request](https://help.github.com/articles/using-pull-requests/)
 mechanism). It's mainly for desktop usage.
 
-I just wanted a tool for auto set programs nice in my system, i.e.:
+The current development philosophy is concerned only with usage on desktop (as
+opposed to server) systems.
+
+I just wanted a tool for auto-setting programs' nice in my system, i.e.:
 
 - Why do I get lag, while compiling kernel and playing games?
 - Why does dropbox client eat all my IO?
