@@ -5,28 +5,36 @@
 set -o pipefail
 
 # Find the absolute path to the script
-typeset -r SCRIPT_DIR="$(dirname "$(realpath -q "${BASH_SOURCE[0]}")")"
+typeset -r SCRIPT_DIR=$(dirname "$(realpath -q "${BASH_SOURCE[0]}")")
 
 # Information about the git repository and build directory saved to variables
-PACKAGE_DIR="${SCRIPT_DIR}/tmp"
-PACKAGE_NAME="ananicy"
-PACKAGE_ARCH="all"
-DEBIAN_VER="$(grep -P -m 1 -o '\d*\.\d*-\d*' debian/changelog)~local1"
-BUILD_ARCH="$(dpkg --print-architecture)"
+typeset -r PACKAGE_DIR=${SCRIPT_DIR}/tmp
+PACKAGE_NAME=Ananicy
+PACKAGE_ARCH=all
+DEBIAN_VER="$(grep -P -m 1 -o '\d*\.\d*\.\d*-\d*' debian/changelog)~local1"
 
 # echo wrappers
-INFO(){ echo "INFO: $*";}
-WARN(){ echo "WARN: $*";}
-ERRO(){ echo "ERRO: $*"; exit 1;}
+INFO() {
+  echo "INFO: $*"
+}
+
+WARN() {
+  echo "WARN: $*"
+}
+
+ERRO() {
+  echo "ERRO: $*"
+  exit 1
+}
 
 debian_package() {
   # Make the script's folder the working dir, in case invoked from elsewhere
   cd "${SCRIPT_DIR}" || exit 1
-  
+
   # Delete the build directory if it exists and create it anew and empty
   rm -rf "${PACKAGE_DIR}"
   mkdir -p "${PACKAGE_DIR}"
-  
+
   # Find and declare the data transfer agent we'll use
   if [ -x "$(command -v curl)" ]; then
     typeset -r TRANSFER_AGENT=curl
@@ -95,7 +103,7 @@ debian_package() {
   cd "${PACKAGE_DIR}"/${PACKAGE_NAME}-"${PACKAGE_VER}" || exit 1
 
   # Append non-destructive "~local1" suffix to version number to indicate a local build
-  perl -i -pe "s/$(grep -P -m 1 -o '\d*\.\d*-\d*' debian/changelog)/$&~local1/" debian/changelog
+  perl -i -pe "s/$(grep -P -m 1 -o '\d*\.\d*\.\d*-\d*' debian/changelog)/$&~local1/" debian/changelog
 
   # Replace the generic distribution string "unstable" with the distribution code-name of the build system
   sed -i "1s/unstable/$(lsb_release -cs)/" debian/changelog
@@ -120,10 +128,13 @@ archlinux_package() {
 }
 
 case $1 in
-  deb) debian_package
-  ;;
-  arch) archlinux_package
-  ;;
-  *) echo "$0 <deb|arch>"
-  ;;
+  deb)
+    debian_package
+    ;;
+  arch)
+    archlinux_package
+    ;;
+  *)
+    echo "$0 <deb|arch>"
+    ;;
 esac
