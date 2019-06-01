@@ -7,6 +7,7 @@ Standards-Version: 4.3.0
 Homepage: https://github.com/Nefelim4ag/Ananicy
 Vcs-Browser: https://github.com/Nefelim4ag/Ananicy
 Vcs-Git: https://github.com/Nefelim4ag/Ananicy.git
+Testsuite: autopkgtest
 
 Package: ananicy
 Architecture: all
