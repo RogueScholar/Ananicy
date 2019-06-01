@@ -46,7 +46,7 @@ To use ananicy you must have systemd installed.
 * ![logo](http://www.monitorix.org/imgs/archlinux.png "arch logo") Arch: [AUR/ananicy-git](https://aur.archlinux.org/packages/ananicy-git)
 
   ```bash
-  yay -S anaicy-git
+  yay -S ananicy-git
   ```
 
 * Debian/Ubuntu: Use included script [package.sh](package.sh) in repository root directory
