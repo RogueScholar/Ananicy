@@ -2,11 +2,12 @@ Source: ananicy
 Maintainer: Peter J. Mello <admin@petermello.net>
 Section: utils
 Priority: optional
-Build-Depends: debhelper-compat (= 12), dh-systemd (>= 1.5)
+Build-Depends: debhelper-compat (= 12)
 Standards-Version: 4.3.0
 Homepage: https://github.com/Nefelim4ag/Ananicy
 Vcs-Browser: https://github.com/Nefelim4ag/Ananicy
 Vcs-Git: https://github.com/Nefelim4ag/Ananicy.git
+Testsuite: autopkgtest
 
 Package: ananicy
 Architecture: all
