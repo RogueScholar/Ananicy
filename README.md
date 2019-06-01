@@ -85,7 +85,7 @@ syntax is described below:
 All fields except 'name' are optional.
 
 'name' used for match processes can be found using the PID of any running process
-_(Replace <process> with the name of the executable you wish to create rules for)_
+_(Replace \<process\> with the name of the executable you wish to create rules for)_
 
 ```bash
 basename $(sudo realpath /proc/$(pidof <process>)/exe)
