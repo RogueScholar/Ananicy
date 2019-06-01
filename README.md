@@ -91,8 +91,8 @@ separate JSON array; general syntax is described below.
 
 All fields except `name` are optional.
 
-'name' used for match processes can be found using the PID of any running
-process _(Replace <process> with the name of the executable you wish to create
+'name' used for matching processes can be found using the PID of any running
+process _(Replace \<process\> with the name of the executable you wish to create
 rules for)_
 
 ```sh
@@ -107,7 +107,8 @@ You can check what Ananicy does with the command:
 ananicy dump proc
 ```
 
-Ananicy loads all rules in ram while starting, so to apply rules, you must restart the service.
+Ananicy loads all rules in ram while starting, so to apply rules, you must
+restart the service.
 
 Available ionice values:
 
