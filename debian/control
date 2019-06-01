@@ -1,0 +1,12 @@
+Package: ananicy
+Section: custom
+Priority: optional
+Architecture: all
+Depends: coreutils, schedtool, systemd
+Essential: no
+Maintainer: nefelim4ag@gmail.com
+Description: ANother Auto NICe daemon
+ Ananicy is a shell daemon created to manage the I/O and CPU priorities of the
+ processes running on your system. With a community-built set of rules for
+ popular applications, all are welcome to add their own rules to the database,
+ where they can be reviewed and refined by other users.
