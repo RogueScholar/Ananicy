@@ -1,62 +1,92 @@
-PREFIX ?= /
+#!/usr/bin/make -f
 
-SRC_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+SHELL = /bin/sh
 
-ANANICY_D_R := $(shell find $(SRC_DIR)/ananicy.d -type f -name "*.rules")
-ANANICY_D_R_I := $(patsubst $(SRC_DIR)/%.rules, $(PREFIX)/etc/%.rules, $(ANANICY_D_R))
+CC = gcc -O2
+CDEBUG = -g
+CFLAGS = $(CDEBUG) -I. -I$(srcdir)
+LDFLAGS = -g
+LIBS =
 
-ANANICY_D_T := $(shell find $(SRC_DIR)/ananicy.d -type f -name "*.types")
-ANANICY_D_T_I := $(patsubst $(SRC_DIR)/%.types, $(PREFIX)/etc/%.types, $(ANANICY_D_T))
+INSTALL = $(command -v install)
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = ${INSTALL} -Dm644
 
-ANANICY_D_G := $(shell find $(SRC_DIR)/ananicy.d -type f -name "*.cgroups")
-ANANICY_D_G_I := $(patsubst $(SRC_DIR)/%.cgroups, $(PREFIX)/etc/%.cgroups, $(ANANICY_D_G))
+prefix ?= /usr/local
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+libexecdir = $(exec_prefix)/libexec
+sbindir = $(exec_prefix)/sbin
+datarootdir = $(prefix)/share
+datadir = $(datarootdir)
+sysconfdir = $(prefix)/etc
+localstatedir = $(prefix)/var
+runstatedir ?= /run
+includedir = $(prefix)/include
+docdir = $(datarootdir)/doc/ananicy
+infodir = $(datarootdir)/info
+localedir = $(datarootdir)/locale
+mandir = $(datarootdir)/man
+manext = .1
 
-A_SERVICE := $(PREFIX)/lib/systemd/system/ananicy.service
-A_CONF := $(PREFIX)/etc/ananicy.d/ananicy.conf
-A_BIN := $(PREFIX)/usr/bin/ananicy
+srcdir := $(dir $(lastword $(MAKEFILE_LIST))) || .
 
+ANANICYD_RULES := $(shell find $(srcdir)/ananicy.d -type f -name "*.rules")
+ANANICYD_RULES_INSTALL := $(patsubst $(srcdir)/%.rules, $(DESTDIR)$(sysconfdir)/%.rules, $(ANANICYD_RULES))
+
+ANANICYD_TYPES := $(shell find $(srcdir)/ananicy.d -type f -name "*.types")
+ANANICYD_TYPES_INSTALL := $(patsubst $(srcdir)/%.types, $(DESTDIR)$(sysconfdir)/%.types, $(ANANICYD_TYPES))
+
+ANANICYD_GROUPS := $(shell find $(srcdir)/ananicy.d -type f -name "*.cgroups")
+ANANICYD_GROUPS_INSTALL := $(patsubst $(srcdir)/%.cgroups, $(DESTDIR)$(sysconfdir)/%.cgroups, $(ANANICYD_GROUPS))
+
+ANANICY_SERVICE := $(DESTDIR)$(libdir)/systemd/system/ananicy.service
+ANANICY_CONF := $(DESTDIR)$(sysconfdir)/ananicy.d/ananicy.conf
+ANANICY_BIN := $(DESTDIR)$(bindir)/ananicy
+
+AUX = README.md LICENSE CHANGELOG.md
+
+.PHONY: all
+all: install
 
 default:  help
 
-$(PREFIX)/etc/%.cgroups: $(SRC_DIR)/%.cgroups
-	install -Dm644 $< $@
+$(DESTDIR)$(sysconfdir)/%.cgroups: $(srcdir)/%.cgroups
+	$(INSTALL_DATA) $< $@
 
-$(PREFIX)/etc/%.types: $(SRC_DIR)/%.types
-	install -Dm644 $< $@
+$(DESTDIR)$(sysconfdir)/%.types: $(srcdir)/%.types
+	$(INSTALL_DATA) $< $@
 
-$(PREFIX)/etc/%.rules: $(SRC_DIR)/%.rules
-	install -Dm644 $< $@
+$(DESTDIR)$(sysconfdir)/%.rules: $(srcdir)/%.rules
+	$(INSTALL_DATA) $< $@
 
-$(A_CONF): $(SRC_DIR)/ananicy.d/ananicy.conf
-	install -Dm644 $< $@
+$(ANANICY_CONF): $(srcdir)/ananicy.d/ananicy.conf
+	$(INSTALL_DATA) $< $@
 
-$(A_BIN): $(SRC_DIR)/ananicy.py
-	install -Dm755 $< $@
-
-$(A_SERVICE): $(SRC_DIR)/ananicy.service
-	install -Dm644 $< $@
+$(ANANICY_BIN): $(srcdir)/ananicy.py
+	$(INSTALL_PROGRAM) -Dm755 $< $@
 
 
-install: ## Install ananicy
-install: $(A_CONF) $(A_BIN)
-install: $(A_SERVICE)
-install: $(ANANICY_D_G_I)
-install: $(ANANICY_D_T_I)
-install: $(ANANICY_D_R_I)
+.PHONY: install
+## Install ananicy
+install: $(ANANICY_CONF) $(ANANICY_BIN)
+install: $(ANANICYD_GROUPS_INSTALL)
+install: $(ANANICYD_TYPES_INSTALL)
+install: $(ANANICYD_RULES_INSTALL)
 
-uninstall: ## Delete ananicy
+## Delete ananicy
 uninstall:
-	@rm -fv $(A_CONF)
-	@rm -rf $(A_BIN)
-	@rm -rf $(A_SERVICE)
-	@rm -rf $(ANANICY_D_G_I)
-	@rm -rf $(ANANICY_D_T_I)
-	@rm -rf $(ANANICY_D_R_I)
+	@rm -fv $(ANANICY_CONF)
+	@rm -rf $(ANANICY_BIN)
+	@rm -rf $(ANANICYD_GROUPS_INSTALL)
+	@rm -rf $(ANANICYD_TYPES_INSTALL)
+	@rm -rf $(ANANICYD_RULES_INSTALL)
 
 
-deb: ## Create debian package
-deb:
-	./package.sh debian
+## Create debian package
+debian:
+	$(SHELL) ./package.sh deb
 
 help: ## Show help
 	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/\\$$//' | column -t -s '##'
