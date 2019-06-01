@@ -1,0 +1,32 @@
+Description: Remove systemd service file from source tree
+ Systemd service files are handled by the Debian package manager and
+ associated handlers, so the file was moved into the packaging folder
+ 'debian/'.
+Author: Peter J. Mello <admin@petermello.net>
+Origin: other
+Forwarded: no
+Last-Update: 2019-06-01
+
+--- a/ananicy.service
++++ b/dev/null
+@@ -1,20 +0,0 @@
+-[Unit]
+-Description=Ananicy - ANother Auto NICe daemon
+-After=local-fs.target
+-
+-[Service]
+-Type=notify
+-ExecStart=/usr/bin/ananicy start
+-Nice=19
+-SuccessExitStatus=143
+-OOMScoreAdjust=-999
+-Restart=always
+-CPUAccounting=true
+-MemoryHigh=16M
+-MemoryMax=64M
+-ProtectSystem=true
+-ProtectHome=true
+-PrivateTmp=yes
+-
+-[Install]
+-WantedBy=local-fs.target
