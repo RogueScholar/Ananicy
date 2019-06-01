@@ -77,7 +77,8 @@ To use ananicy you must have systemd installed.
   yay -S ananicy-git
   ```
 
-- Debian/Ubuntu: Use included script [package.sh](package.sh) in repository root directory
+- Debian/Ubuntu: Use included script [package.sh](package.sh) in repository root
+  directory
 
   ```sh
   git clone https://github.com/Nefelim4ag/Ananicy.git
