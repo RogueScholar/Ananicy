@@ -1,5 +1,5 @@
 [Unit]
-Description=Ananicy - ANother Auto NICe daemon
+Description=Ananicy - ANother Auto NICe-Y daemon
 After=local-fs.target
 
 [Service]
