@@ -9,7 +9,7 @@ typeset -r SCRIPT_DIR=$(dirname "$(realpath -q "${BASH_SOURCE[0]}")")
 
 # Information about the git repository and build directory saved to variables
 typeset -r PACKAGE_DIR=${SCRIPT_DIR}/tmp
-PACKAGE_NAME=Ananicy
+PACKAGE_NAME=ananicy
 PACKAGE_ARCH=all
 DEBIAN_VER="$(grep -P -m 1 -o '\d*\.\d*\.\d*-\d*' debian/changelog)~local1"
 
