@@ -1,0 +1,18 @@
+Source: ananicy
+Maintainer: Peter J. Mello <admin@petermello.net>
+Section: utils
+Priority: optional
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.3.0
+Homepage: https://github.com/Nefelim4ag/Ananicy
+Vcs-Browser: https://github.com/Nefelim4ag/Ananicy
+Vcs-Git: https://github.com/Nefelim4ag/Ananicy.git
+
+Package: ananicy
+Architecture: all
+Depends: schedtool, systemd, ${misc:Depends}
+Description: ANother Auto NICe-Y daemon
+ Ananicy is a shell daemon created to manage the I/O and CPU priorities of the
+ processes running on your system. With a community-built set of rules for
+ popular applications, all are welcome to add their own rules to the database,
+ where they can be reviewed and refined by other users.

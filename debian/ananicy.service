@@ -1,6 +1,6 @@
 [Unit]
-Description=Ananicy - ANother Auto NICe daemon
-After=local-fs.target
+Description=Ananicy - ANother Auto NICe-Y daemon
+After=multi-user.target
 
 [Service]
 Type=notify
@@ -17,4 +17,4 @@ ProtectHome=true
 PrivateTmp=yes
 
 [Install]
-WantedBy=local-fs.target
+WantedBy=multi-user.target

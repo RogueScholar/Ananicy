@@ -1,0 +1,36 @@
+ananicy (2.1.0-1) disco; urgency=medium
+
+  * New upstream release
+
+ -- Peter J. Mello <admin@petermello.net>  Sat, 29 Jun 2019 04:48:08 -0700
+
+ananicy (2.0.0-1) bionic; urgency=low
+
+  * Remove rule for steam client
+
+ -- Timofey Titovets <timofey.titovets@synesis.ru>  Thu, 4 Oct 2018 16:41:00 -0700
+
+ananicy (1.99.6-1) bionic; urgency=low
+
+  * Fix typos
+
+ -- Timofey Titovets <timofey.titovets@synesis.ru>  Sat, 12 May 2018 15:07:00 -0700
+
+ananicy (1.99.5-1) bionic; urgency=low
+
+  * Fixes for Cgroup handling
+  * Fix gcc rules
+  * Modify SVP.rules
+  * Use lazy loading for various entries
+  * Decrease (slightly) CPU usage
+  * Update README.md
+
+ -- Timofey Titovets <timofey.titovets@synesis.ru>  Fri, 11 May 2018 15:04:00 -0700
+
+ananicy (1.99.4-1) bionic; urgency=low
+
+  * Convert ppsspp.rules to new syntax
+  * Create rules for Telegram desktop client
+  * Create cinnamon.rules to manage Linux Mint DE system daemons
+
+ -- Timofey Titovets <timofey.titovets@synesis.ru>  Sun, 22 Apr 2018 05:03:00 -0700
