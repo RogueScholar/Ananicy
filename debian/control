@@ -7,12 +7,10 @@ Standards-Version: 4.3.0
 Homepage: https://github.com/Nefelim4ag/Ananicy
 Vcs-Browser: https://github.com/Nefelim4ag/Ananicy
 Vcs-Git: https://github.com/Nefelim4ag/Ananicy.git
-Testsuite: autopkgtest
 
 Package: ananicy
 Architecture: all
-Essential: no
-Depends: coreutils, schedtool, systemd, ${misc:Depends}
+Depends: schedtool, systemd, ${misc:Depends}
 Description: ANother Auto NICe-Y daemon
  Ananicy is a shell daemon created to manage the I/O and CPU priorities of the
  processes running on your system. With a community-built set of rules for
