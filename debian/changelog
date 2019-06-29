@@ -6,9 +6,9 @@ ananicy (2.1.0-1) disco; urgency=medium
 
 ananicy (2.0.0-2) disco; urgency=low
 
-  * No-changes build from upstream source for Ubuntu 19.04 "Disco Dingo"
+  * New upstream release
 
- -- Peter J. Mello <admin@petermello.net>  Sat, 1 Jun 2019 02:21:28 -0700
+ -- Peter J. Mello <admin@petermello.net>  Sat, 29 Jun 2019 04:48:08 -0700
 
 ananicy (2.0.0-1) bionic; urgency=low
 
