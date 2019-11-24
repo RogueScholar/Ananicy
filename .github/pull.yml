@@ -9,7 +9,7 @@ rules:
     reviewers:
       - RogueScholar
   - base: debian
-    upstream: master
+    upstream: Nefelim4ag:Ananicy
     mergeMethod: rebase
     assignees:
       - RogueScholar
