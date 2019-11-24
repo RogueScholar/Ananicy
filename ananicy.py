@@ -38,6 +38,7 @@ class TPID:
         self.pid = pid
         self.tpid = tpid
         self.prefix = "/proc/{}/task/{}/".format(pid, tpid)
+        self.parent = "/proc/{}/".format(pid)
         self.exe = os.path.realpath("/proc/{}/exe".format(pid))
         self.__oom_score_adj = self.prefix + "/oom_score_adj"
 
@@ -71,15 +72,37 @@ class TPID:
     @property
     def stat_name(self):
         with open(self.prefix + "/status") as _status_file:
-            name_line = _status_file.readline()
-            line_list = name_line.split()
-            if line_list:
-                return line_list[1]
+            try:
+                name_line = _status_file.readline()
+                line_list = name_line.split()
+                if line_list:
+                    return line_list[1]
+            except (UnicodeDecodeError, IndexError):
+                pass
             return ""
 
     @property
     def nice(self):
         return os.getpriority(os.PRIO_PROCESS, self.tpid)
+
+    @property
+    def autogroup(self):
+        try:
+            with open(self.parent + "/autogroup", 'r') as _autogroup:
+                autogroup = _autogroup.readline().strip('/\n').split(" nice ")
+        except FileNotFoundError:
+            return None
+        group_num = int(autogroup[0].split('-')[1])
+        nice = int(autogroup[1])
+        return { "group": group_num, "nice": nice }
+
+    @autogroup.setter
+    def autogroup(self, autogroup_nice):
+        try:
+            with open(self.parent + "/autogroup", 'w') as _autogroup:
+                _autogroup.write(str(autogroup_nice))
+        except FileNotFoundError:
+            pass
 
     @property
     def cmdline(self):
@@ -132,6 +155,13 @@ class TPID:
             self._stat = m.group(0).rsplit()
         _sched = int(self._stat[39])
         return ProcSchedulerPolicy(_sched).name.lower()
+
+    @property
+    def rtprio(self):
+        if not self._stat:
+            m = re.search('\\) . .*', self.stat)
+            self._stat = m.group(0).rsplit()
+        return int(self._stat[38])
 
 
 class CgroupController:
@@ -255,6 +285,12 @@ class Ananicy:
             if not 0 <= ionice <= 7:
                 raise Failure("IOnice/IOprio allowed only in range 0-7")
         return ionice
+
+    def __check_rtprio(self, rtprio):
+        if rtprio:
+            if not 1 <= rtprio <= 99:
+                raise Failure("RTprio allowed only in range 1-99")
+        return rtprio
 
     def __check_oom_score_adj(self, adj):
         if adj:
@@ -380,6 +416,7 @@ class Ananicy:
             "ioclass": line.get("ioclass"),
             "ionice": self.__check_ionice(line.get("ionice")),
             "sched": line.get("sched"),
+            "rtprio": self.__check_rtprio(line.get("rtprio")),
             "oom_score_adj": self.__check_oom_score_adj(
                 line.get("oom_score_adj")),
             "cgroup": line.get("cgroup")
@@ -418,8 +455,8 @@ class Ananicy:
             if not self.types.get(_type):
                 raise Failure('"type": "{}" not defined'.format(_type))
             _type = self.types[_type]
-            for attr in ("nice", "ioclass", "ionice", "sched", "oom_score_adj",
-                         "cgroup"):
+            for attr in ("nice", "ioclass", "ionice", "sched", "rtprio",
+                         "oom_score_adj", "cgroup"):
                 tmp = _type.get(attr)
                 if not tmp:
                     continue
@@ -435,6 +472,7 @@ class Ananicy:
             "ioclass": line.get("ioclass"),
             "ionice": self.__check_ionice(line.get("ionice")),
             "sched": line.get("sched"),
+            "rtprio": self.__check_rtprio(line.get("rtprio")),
             "oom_score_adj": self.__check_oom_score_adj(
                 line.get("oom_score_adj")),
             "type": line.get("type"),
@@ -622,18 +660,20 @@ class Ananicy:
         cmd += [str(pid)]
         subprocess.run(cmd, stdout=subprocess.DEVNULL)
 
-    def sched(self, tpid, sched, name):
+    def sched(self, tpid, sched, rtprio, name):
         p_tpid = self.proc[tpid]
         l_prio = None
         c_sched = p_tpid.sched
+        c_rtprio = p_tpid.rtprio
         if not name:
             name = p_tpid.cmd
-        if not c_sched or c_sched == sched:
+        if not c_sched or (c_sched == sched
+                           and (rtprio is None or c_rtprio == rtprio)):
             return
         if sched == "other" and c_sched == "normal":
             return
         if sched == "rr" or sched == "fifo":
-            l_prio = 1
+            l_prio = rtprio or 1
         self.sched_cmd(p_tpid.tpid, sched, l_prio)
         msg = "sched: {}[{}/{}] {} -> {}".format(p_tpid.cmd, p_tpid.pid, tpid,
                                                  c_sched, sched)
@@ -647,7 +687,7 @@ class Ananicy:
             self.ionice(tpid, rule.get("ioclass"), rule.get("ionice"),
                         rule_name)
         if rule.get("sched"):
-            self.sched(tpid, rule["sched"], rule_name)
+            self.sched(tpid, rule["sched"], rule["rtprio"], rule_name)
         if rule.get("oom_score_adj"):
             self.oom_score_adj(tpid, rule["oom_score_adj"], rule_name)
 
@@ -720,7 +760,9 @@ class Ananicy:
                     "stat": TPID_l.stat,
                     "stat_name": TPID_l.stat_name,
                     "nice": TPID_l.nice,
+                    "autogroup": TPID_l.autogroup,
                     "sched": TPID_l.sched,
+                    "rtprio": TPID_l.rtprio,
                     "ionice": [TPID_l.ioclass, TPID_l.ionice],
                     "oom_score_adj": TPID_l.oom_score_adj,
                     "cmdline": TPID_l.cmdline,
@@ -730,15 +772,52 @@ class Ananicy:
 
         print(json.dumps(proc_dict, indent=4), flush=True)
 
+    def dump_autogroup(self):
+        self.proc_map_update()
+        proc_autogroup = {}
+        for tpid in self.proc:
+            try:
+                TPID_l = self.proc[tpid]
+                group_num = TPID_l.autogroup["group"]
+                proc_autogroup[group_num] = {
+                    "nice": TPID_l.autogroup["nice"],
+                    "proc": {}
+                }
+            except FileNotFoundError:
+                continue
+
+        for tpid in self.proc:
+            try:
+                TPID_l = self.proc[tpid]
+                group_num = TPID_l.autogroup["group"]
+                proc_autogroup[group_num]["proc"][tpid] = {
+                    "pid": TPID_l.pid,
+                    "tpid": TPID_l.tpid,
+                    "exe": TPID_l.exe,
+                    "cmd": TPID_l.cmd,
+                    "stat": TPID_l.stat,
+                    "stat_name": TPID_l.stat_name,
+                    "nice": TPID_l.nice,
+                    "sched": TPID_l.sched,
+                    "ionice": [TPID_l.ioclass, TPID_l.ionice],
+                    "oom_score_adj": TPID_l.oom_score_adj,
+                    "cmdline": TPID_l.cmdline,
+                }
+            except FileNotFoundError:
+                continue
+
+        print(json.dumps(proc_autogroup, indent=4), flush=True)
+
 
 def help():
     print(
         "Usage: ananicy [options]\n",
-        "  start         Run script\n",
-        "  dump rules    Generate and print rules cache to stdout\n",
-        "  dump types    Generate and print types cache to stdout\n",
-        "  dump cgroups  Generate and print cgroups cache to stdout\n",
-        "  dump proc     Generate and print proc map cache to stdout",
+        "  start          Run script\n",
+        "  dump rules     Generate and print rules cache to stdout\n",
+        "  dump types     Generate and print types cache to stdout\n",
+        "  dump cgroups   Generate and print cgroups cache to stdout\n",
+        "  dump proc      Generate and print proc map cache to stdout\n",
+        "  dump autogroup Generate and print autogroup tree",
         flush=True)
     exit(0)
 
@@ -765,6 +844,8 @@ def main(argv):
                 daemon.dump_cgroups()
             if argv[2] == "proc":
                 daemon.dump_proc()
+            if argv[2] == "autogroup":
+                daemon.dump_autogroup()
     except PermissionError as e:
         print("You are root?: {}".format(e))
 
