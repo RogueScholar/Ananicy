@@ -1,3 +1,15 @@
+ananicy (2.1.1-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Peter J. Mello <admin@petermello.net>  Fri, 01 May 2020 14:28:27 -0700
+
+ananicy (2.1.0-2) eoan; urgency=medium
+
+  * New upstream release
+
+ -- Peter J. Mello <admin@petermello.net>  Sun, 24 Nov 2019 13:50:37 -0800
+
 ananicy (2.1.0-1) disco; urgency=medium
 
   * New upstream release
