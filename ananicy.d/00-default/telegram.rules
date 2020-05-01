@@ -1,2 +1,6 @@
-# https://desktop.telegram.org/
+ # https://desktop.telegram.org/
 { "name": "telegram-desktop", "type": "Chat" }
+{ "name": "telegram-desktop.bin", "type": "Chat" }
+# some versions require this name
+{ "name": "Telegram", "type": "Chat" }
+{ "name": "telegram", "type": "Chat" }
