@@ -1,0 +1,14 @@
+# Author: Peter J. Mello <admin@petermello.net>
+# Version: 1.0.0 (Using <https://semver.org/>)
+# Updated: 2020-05-21
+# SPDX-License-Identifier: MPL-2.0
+# See <https://docs.kde.org/stable5/en/applications/katepart/config-variables.html> for more information.
+
+kate: auto-brackets on; backspace-indents on; block-selection off; bom off; dynamic-word-wrap on; eol unix; folding-markers off; folding-preview on; icon-border on; indent-mode cstyle; indent-pasted-text on; indent-width 2; keep-extra-spaces on; line-numbers on; newline-at-eof on; overwrite-mode off; persistent-selection off; remove-trailing-spaces *; replace-tabs-save on; replace-tabs on; scrollbar-minimap on; show-tabs on; smart-home on; tab-width 4; word-wrap-column 80; word-wrap off;
+kate-mimetype(text/x-c++src): indent-width 4;
+kate-wildcard(*.js;*.qml): indent-width 4; replace-tabs-save off; replace-tabs off;
+kate-wildcard(*.json): newline-at-eof off; tab-width 2;
+kate-wildcard(*.md;*.txt): indent-width 4; remove-trailing-spaces -;
+kate-wildcard(*.py): dynamic-word-wrap off; indent-mode python; indent-width 4; word-wrap on;
+kate-wildcard(Makefile): replace-tabs-save off; replace-tabs off;
+kate-wildcard(CHANGELOG;ChangeLog): indent-width 4; replace-tabs-save off; replace-tabs off;
