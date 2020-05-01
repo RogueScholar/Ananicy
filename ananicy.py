@@ -506,7 +506,7 @@ class Ananicy:
 
     def find_files(self, path, name_mask):
         files = []
-        entries = os.listdir(path)
+        entries = sorted(os.listdir(path))
         if not entries:
             return files
         for entry_name in entries:
@@ -826,6 +826,9 @@ def main(argv):
 
     if len(argv) < 2:
         help()
+
+    os.environ["LANG"] = ""
+    os.environ["LANGUAGE"] = ""
 
     try:
         if argv[1] == "start":
