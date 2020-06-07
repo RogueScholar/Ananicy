@@ -1,12 +1,13 @@
 Source: ananicy
-Maintainer: Peter J. Mello <admin@petermello.net>
 Section: utils
 Priority: optional
+Maintainer: Peter J. Mello <admin@petermello.net>
 Build-Depends: debhelper-compat (= 12)
-Standards-Version: 4.3.0
+Standards-Version: 4.5.0
 Homepage: https://github.com/Nefelim4ag/Ananicy
-Vcs-Browser: https://github.com/Nefelim4ag/Ananicy
-Vcs-Git: https://github.com/Nefelim4ag/Ananicy.git
+Vcs-Git: https://github.com/RogueScholar/ananicy.git
+Vcs-Browser: https://github.com/RogueScholar/ananicy
+Rules-Requires-Root: no
 
 Package: ananicy
 Architecture: all
