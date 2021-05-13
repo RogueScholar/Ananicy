@@ -4,13 +4,14 @@ Upstream-Contact: Timofey Titovets <timofey.titovets@synesis.ru>
 Source: https://github.com/Nefelim4ag/Ananicy/releases
 
 Files: *
-Copyright: 2016-2020, Timofey Titovets <timofey.titovets@synesis.ru>
+Copyright: 2016-2021, Timofey Titovets <timofey.titovets@synesis.ru>
+           2020-2021, Vincent Grande <shoober420@gmail.com>
            2017-2019, Noel Kuntze <noel.kuntze@thermi.consulting>
 License: GPL-3.0-or-later
 
 Files: debian/*
 Copyright: 2018, Timofey Titovets <timofey.titovets@synesis.ru>
-           2019-2020, Peter J. Mello <admin@petermello.net>
+           2019-2021, Peter J. Mello <admin@petermello.net>
 License: GPL-3.0-or-later OR MPL-2.0
 
 License: GPL-3.0-or-later

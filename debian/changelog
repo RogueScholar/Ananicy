@@ -1,8 +1,8 @@
-ananicy (2.1.1+git20200606-0dev) focal; urgency=medium
+ananicy (2.2.1-1) hirsute; urgency=medium
 
-  * Build from upstream git master for Ubuntu 20.04 LTS "Focal Fossa".
+  * New upstream release: v2.2.1
 
- -- Peter J. Mello <admin@petermello.net>  Sat, 06 Jun 2020 08:29:41 -0700
+ -- Peter J. Mello <admin@petermello.net>  Thu, 13 May 2021 05:34:07 -0700
 
 ananicy (2.1.0-2) eoan; urgency=medium
 

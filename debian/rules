@@ -1,18 +1,48 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
+# -*- mode: makefile-gmake; coding: utf-8 -*-
 
-DEB_BUILD_MAINT_OPTIONS = future=+lfs hardening=+all reproducible=+fixfilepath
-DH_INTERNAL_OPTIONS     = -v
-DH_VERBOSE              = 1
+BASH_PATH ::= $(shell which bash)
+SHELL     ::= $(shell realpath -Leq $(BASH_PATH) || echo '/bin/sh')
+
+ifeq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
+	DH_INTERNAL_OPTIONS = --verbose
+	DH_VERBOSE          = 1
+endif
+
+DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS  = 1
 LC_ALL                  = C.UTF-8
-export DEB_BUILD_MAINT_OPTIONS DH_INTERNAL_OPTIONS DH_VERBOSE LC_ALL
 
-DPKG_EXPORT_BUILDFLAGS = 1
+DISTRO_VENDOR ::= $(shell dpkg-vendor --query Vendor)
+UBUNTUVER     ::= $(shell lsb_release -rs | cut -c-5)
+
+ifeq (Ubuntu,$(DISTRO_VENDOR))
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n17.10\n" | sort -g | head -1))
+	DEB_BUILD_MAINT_OPTIONS += future=+lfs
+	DPKG_EXPORT_BUILDTOOLS   = 1
+    include /usr/share/dpkg/buildtools.mk
+endif
+endif
+
+ifeq (Ubuntu,$(DISTRO_VENDOR))
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n19.04\n" | sort -g | head -1))
+	DEB_BUILD_MAINT_OPTIONS += reproducible=+fixfilepath
+endif
+endif
+
+ifeq (Ubuntu,$(DISTRO_VENDOR))
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n21.04\n" | sort -g | head -1))
+	DEB_BUILD_MAINT_OPTIONS += optimize=+lto
+endif
+endif
+
 include /usr/share/dpkg/default.mk
+
+export DEB_BUILD_MAINT_OPTIONS DH_VERBOSE LC_ALL
 
 
 %:
-	dh $@
+	dh $@ -v
 
 
 override_dh_auto_clean:
