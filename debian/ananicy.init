@@ -1,0 +1,15 @@
+#!/usr/bin/env /lib/init/init-d-script
+### BEGIN INIT INFO
+# Provides:          ananicy
+# Required-Start:    $syslog $time $local_fs
+# Required-Stop:     $syslog $time $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: ANother Auto NICe-Y daemon
+# Description:       Daemon for assigning `nice' values to running processes
+#                    automatically based on database of preset rules
+### END INIT INFO
+
+DAEMON="/usr/bin/ananicy"
+DAEMON_ARGS="start"
+PIDFILE="/run/ananicy.pid"

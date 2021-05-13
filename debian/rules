@@ -2,6 +2,7 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 
 BASH_PATH ::= $(shell which bash)
+LC_ALL      = C.UTF-8
 SHELL     ::= $(shell realpath -Leq $(BASH_PATH) || echo '/bin/sh')
 
 ifeq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
@@ -9,36 +10,9 @@ ifeq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
 	DH_VERBOSE          = 1
 endif
 
-DEB_BUILD_MAINT_OPTIONS = hardening=+all
-DPKG_EXPORT_BUILDFLAGS  = 1
-LC_ALL                  = C.UTF-8
-
-DISTRO_VENDOR ::= $(shell dpkg-vendor --query Vendor)
-UBUNTUVER     ::= $(shell lsb_release -rs | cut -c-5)
-
-ifeq (Ubuntu,$(DISTRO_VENDOR))
-ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n17.10\n" | sort -g | head -1))
-	DEB_BUILD_MAINT_OPTIONS += future=+lfs
-	DPKG_EXPORT_BUILDTOOLS   = 1
-    include /usr/share/dpkg/buildtools.mk
-endif
-endif
-
-ifeq (Ubuntu,$(DISTRO_VENDOR))
-ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n19.04\n" | sort -g | head -1))
-	DEB_BUILD_MAINT_OPTIONS += reproducible=+fixfilepath
-endif
-endif
-
-ifeq (Ubuntu,$(DISTRO_VENDOR))
-ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n21.04\n" | sort -g | head -1))
-	DEB_BUILD_MAINT_OPTIONS += optimize=+lto
-endif
-endif
-
 include /usr/share/dpkg/default.mk
 
-export DEB_BUILD_MAINT_OPTIONS DH_VERBOSE LC_ALL
+export DH_VERBOSE LC_ALL
 
 
 %:
@@ -51,3 +25,12 @@ override_dh_autoreconf:
 override_dh_auto_configure:
 override_dh_auto_build:
 override_dh_auto_install:
+
+override_dh_installman:
+	ln -s $(CURDIR)/ananicy.py $(CURDIR)/ananicy
+	help2man -N -s 8 -L "C" -n "rules-based process ionice manager" \
+		-m "ANother Auto NICe-Y daemon" -o $(CURDIR)/debian/ananicy.8 \
+		-S "Timofey Titovets <timofey.titovets@synesis.ru>" --help-option=';' \
+		--version-string="$(DEB_VERSION_UPSTREAM)" $(CURDIR)/ananicy
+	@rm -fv $(CURDIR)/ananicy
+	dh_installman -O-v

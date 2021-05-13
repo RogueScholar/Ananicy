@@ -2,7 +2,8 @@ Source: ananicy
 Section: utils
 Priority: optional
 Maintainer: Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 12), lsb-release
+Build-Depends: debhelper-compat (= 12), dh-python, dh-sequence-python3,
+ help2man, python3-all
 Standards-Version: 4.5.1
 Homepage: https://github.com/Nefelim4ag/Ananicy
 Vcs-Git: https://github.com/RogueScholar/ananicy.git -b debian
@@ -11,7 +12,8 @@ Rules-Requires-Root: no
 
 Package: ananicy
 Architecture: all
-Depends: schedtool, systemd, ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Depends: python3, schedtool, systemd, ${python3:Depends}, ${misc:Depends}
 Description: ANother Auto NICe-Y daemon
  Ananicy is a shell daemon created to manage the I/O and CPU priorities of the
  processes running on your system. With a community-built set of rules for

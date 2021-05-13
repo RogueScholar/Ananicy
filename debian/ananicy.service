@@ -1,7 +1,8 @@
 [Unit]
 Description=Ananicy - ANother Auto NICe-Y daemon
 Documentation=https://github.com/Nefelim4ag/Ananicy
-After=local-fs.target
+After=local-fs.target multi-user.target
+Wants=local-fs.target multi-user.target
 
 [Service]
 Type=notify
@@ -20,4 +21,4 @@ ProtectHome=true
 PrivateTmp=yes
 
 [Install]
-WantedBy=local-fs.target
+WantedBy=multi-user.target

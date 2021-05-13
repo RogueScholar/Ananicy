@@ -1,0 +1,8 @@
+# Lintian fails to parse well-formed YAML nested mappings as allowed by DEP-12
+upstream-metadata-missing-bug-tracking
+
+# Upstream tagged release tarballs are not cryptographically signed
+debian-watch-does-not-check-gpg-signature
+
+# Ubuntu fails to backport recent debhelper major versions to LTS releases
+package-uses-old-debhelper-compat-version 12
