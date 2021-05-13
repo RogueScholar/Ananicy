@@ -1,6 +1,11 @@
-################################################################################S
-# https://community.kde.org/Baloo
-# Baloo is the file indexing and file search framework for KDE.
+# SPDX-FileCopyrightText: © 2017-2018 Timofey Titovets <timofey.titovets@synesis.ru>
+# SPDX-FileCopyrightText: © 2017-2018 Mikhail Abbas <mikhail.abbas@gmail.com>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ------------------------------------------------------------------------------
+# Group rules file for default KDE Plasma 5 framework background processes
+# Baloo is the file indexer/search daemon for KDE Plasma 5 <https://community.kde.org/Baloo>
+
 { "name": "baloo_file", "type": "BG_CPUIO" }
 
 { "name": "krunner",      "type": "LowLatency_RT" }

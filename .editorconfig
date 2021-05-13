@@ -1,7 +1,11 @@
-# Author: Peter J. Mello <admin@petermello.net>
+# SPDX-FileCopyrightText: 🄯 2020-2021 Peter J. Mello <admin@petermello.net>
+#
+# SPDX-License-Identifier: CC0-1.0
+# ------------------------------------------------------------------------------
 # Version: 1.1.0 (Using <https://semver.org/>)
+#
 # Updated: 2020-06-06
-# SPDX-License-Identifier: MPL-2.0
+# ------------------------------------------------------------------------------
 # Visit <https://editorconfig.org/> for more information.
 
 root = true

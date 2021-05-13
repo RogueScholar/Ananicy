@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 🄯 2019-2021 Peter J. Mello <admin@petermello.net>
+#
+# SPDX-License-Identifier: CC0-1.0
+# ------------------------------------------------------------------------------
+
 user=Nefelim4ag
 project=Ananicy
 date-format=%Y-%m-%d
@@ -5,7 +10,6 @@ output=CHANGELOG.md
 base=CHANGELOG.md
 header-label="# Changelog"
 release-url=https://github.com/Nefelim4ag/Ananicy/releases
-future-release=2.1.1
 release-branch=master
 since-tag=1.0.0
 verbose=false

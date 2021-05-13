@@ -1,3 +1,11 @@
+# SPDX-FileCopyrightText: © 2017-2018 Timofey Titovets <timofey.titovets@synesis.ru>
+# SPDX-FileCopyrightText: © 2018 Noel Kuntze <noel.kuntze@thermi.consulting>
+# SPDX-FileCopyrightText: © 2021 Austin Dworaczyk Wiltshire <adworacz@calpoly.edu>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ------------------------------------------------------------------------------
+# Group rule for the most common file compression binaries
+
 { "name": "bzip2",  "type": "BG_CPUIO" }
 { "name": "gzip",   "type": "BG_CPUIO" }
 { "name": "lz4",    "type": "BG_CPUIO" }

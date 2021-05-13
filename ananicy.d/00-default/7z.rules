@@ -1,2 +1,7 @@
-#7z descompression
+# SPDX-FileCopyrightText: © 2020 XRaTiX <xratix@devtube.dev-wiki.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ------------------------------------------------------------------------------
+# LZMA/7z decompression
+
 {"name": "7z", "type": "BG_CPUIO"}

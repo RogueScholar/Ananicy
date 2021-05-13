@@ -1,3 +1,11 @@
+# SPDX-FileCopyrightText: © 2017-2018 Timofey Titovets <timofey.titovets@synesis.ru>
+# SPDX-FileCopyrightText: © 2017 Mice Pápai <24679742@qq.com>
+# SPDX-FileCopyrightText: © 2018 Noel Kuntze <noel.kuntze@thermi.consulting>
+# SPDX-FileCopyrightText: © 2018 Mikhail Abbas <mikhail.abbas@gmail.com>
+# SPDX-FileCopyrightText: © 2019 François Menning <f.menning@gmail.com>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ------------------------------------------------------------------------------
 # Type: Game
 # Use more CPU time if possible
 # Games do not always need more IO, but in most cases can be hungry for CPU
