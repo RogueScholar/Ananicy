@@ -55,12 +55,12 @@ class TPID:
         """ Flag set if corresponding rule
         have been applied
         """
-        NICE          = auto()
-        IOCLASS       = auto()
-        SCHED         = auto()
+        NICE = auto()
+        IOCLASS = auto()
+        SCHED = auto()
         OOM_SCORE_ADJ = auto()
-        CGROUP        = auto()
-        ALLSET        = NICE | IOCLASS | SCHED | OOM_SCORE_ADJ | CGROUP
+        CGROUP = auto()
+        ALLSET = NICE | IOCLASS | SCHED | OOM_SCORE_ADJ | CGROUP
 
     def __init__(self, pid: int, tpid: int, verbose_opts={}):
         self.verbose_opts = verbose_opts
@@ -129,7 +129,8 @@ class TPID:
 
     def nice(self, nice: int):
         os.setpriority(os.PRIO_PROCESS, self.tpid, nice)
-        msg = "renice: {}[{}/{}] -> {}".format(self.cmd, self.pid, self.tpid, nice)
+        msg = "renice: {}[{}/{}] -> {}".format(
+            self.cmd, self.pid, self.tpid, nice)
         print_verbose_msg(msg, self.verbose_opts, "apply_nice")
         retcode = subprocess.run(
             ["renice", "-n", str(nice), "-p",
@@ -151,7 +152,7 @@ class TPID:
             nice = int(autogroup[1])
         except:
             return None
-        return { "group": group_num, "nice": nice }
+        return {"group": group_num, "nice": nice}
 
     @autogroup.setter
     def autogroup(self, autogroup_nice):
@@ -210,12 +211,12 @@ class TPID:
         if ionice is not None:
             args.extend(("-n", str(ionice)))
             msg = "ionice: {}[{}/{}] -> {}".format(
-                    self.cmd, self.pid, self.tpid, ionice)
+                self.cmd, self.pid, self.tpid, ionice)
             print_verbose_msg(msg, self.verbose_opts, "apply_ionice")
         if ioclass is not None:
             args.extend(("-c", str(ioclass)))
             msg = "ioclass: {}[{}/{}] -> {}".format(
-                    self.cmd, self.pid, self.tpid, ioclass)
+                self.cmd, self.pid, self.tpid, ioclass)
             print_verbose_msg(msg, self.verbose_opts, "apply_ioclass")
         retcode = subprocess.run(
             ["ionice", "-p", str(self.tpid), *args],
@@ -706,7 +707,8 @@ class Ananicy:
             return
         tpid.apply_rules(rule, self.cgroups)
         if tpid.state != TPID.State.ALLSET:
-            print("Warn: Not all rules were applied on {}[{}/{}] = {}".format(tpid.cmd, tpid.pid, tpid.tpid, tpid.state))
+            print("Warn: Not all rules were applied on {}[{}/{}] = {}".format(
+                tpid.cmd, tpid.pid, tpid.tpid, tpid.state))
 
     def run(self):
         while True:
