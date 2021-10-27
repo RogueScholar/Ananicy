@@ -103,8 +103,7 @@ class TPID:
         with open(self.__oom_score_adj, "w") as _oom_score_adj_file:
             _oom_score_adj_file.write(str(oom_score_adj))
             msg = "oom_score_adj: {}[{}/{}] -> {}".format(
-                self.cmd, self.pid, self.tpid, oom_score_adj
-            )
+                self.cmd, self.pid, self.tpid, oom_score_adj)
             print_verbose_msg(msg, self.verbose_opts, "apply_oom_score_adj")
             return True
 
@@ -131,11 +130,13 @@ class TPID:
 
     def nice(self, nice: int):
         os.setpriority(os.PRIO_PROCESS, self.tpid, nice)
-        msg = "renice: {}[{}/{}] -> {}".format(self.cmd, self.pid, self.tpid, nice)
+        msg = "renice: {}[{}/{}] -> {}".format(self.cmd, self.pid, self.tpid,
+                                               nice)
         print_verbose_msg(msg, self.verbose_opts, "apply_nice")
         retcode = subprocess.run(
-            ["renice", "-n", str(nice), "-p", str(self.pid)], stdout=subprocess.DEVNULL
-        ).returncode
+            ["renice", "-n", str(nice), "-p",
+             str(self.pid)],
+            stdout=subprocess.DEVNULL).returncode
         if retcode != 0:
             raise Failure()
         return True
@@ -212,19 +213,17 @@ class TPID:
         args = []
         if ionice is not None:
             args.extend(("-n", str(ionice)))
-            msg = "ionice: {}[{}/{}] -> {}".format(
-                self.cmd, self.pid, self.tpid, ionice
-            )
+            msg = "ionice: {}[{}/{}] -> {}".format(self.cmd, self.pid,
+                                                   self.tpid, ionice)
             print_verbose_msg(msg, self.verbose_opts, "apply_ionice")
         if ioclass is not None:
             args.extend(("-c", str(ioclass)))
-            msg = "ioclass: {}[{}/{}] -> {}".format(
-                self.cmd, self.pid, self.tpid, ioclass
-            )
+            msg = "ioclass: {}[{}/{}] -> {}".format(self.cmd, self.pid,
+                                                    self.tpid, ioclass)
             print_verbose_msg(msg, self.verbose_opts, "apply_ioclass")
         retcode = subprocess.run(
-            ["ionice", "-p", str(self.tpid), *args], stdout=subprocess.DEVNULL
-        ).returncode
+            ["ionice", "-p", str(self.tpid), *args],
+            stdout=subprocess.DEVNULL).returncode
         if retcode != 0:
             raise Failure()
         return True
@@ -257,7 +256,8 @@ class TPID:
         if l_prio:
             cmd += ["-p", str(l_prio)]
         cmd += [str(self.pid)]
-        msg = "sched: {}[{}/{}] -> {}".format(self.cmd, self.pid, self.tpid, sched)
+        msg = "sched: {}[{}/{}] -> {}".format(self.cmd, self.pid, self.tpid,
+                                              sched)
         print_verbose_msg(msg, self.verbose_opts, "apply_sched")
         retcode = subprocess.run(cmd, stdout=subprocess.DEVNULL).returncode
         if retcode != 0:
@@ -279,7 +279,8 @@ class TPID:
         self.__cgroups = cgroups
         for cgroup in self.__cgroups:
             cgroup.add_pid(self.tpid)
-            msg = "Cgroup: {}[{}] added to {}".format(self.cmd, self.tpid, cgroup.name)
+            msg = "Cgroup: {}[{}] added to {}".format(self.cmd, self.tpid,
+                                                      cgroup.name)
             print_verbose_msg(msg, self.verbose_opts, "apply_cgroup")
         return True
 
@@ -356,7 +357,8 @@ class CgroupController:
             while self.files_mtime[tasks_path] == os.path.getmtime(tasks_path):
                 sleep(1)
 
-            self.files_mtime[self.files["tasks"]] = os.path.getmtime(tasks_path)
+            self.files_mtime[self.files["tasks"]] = os.path.getmtime(
+                tasks_path)
 
             tasks = {}
             with open(self.files["tasks"], "r") as fd:
@@ -469,8 +471,7 @@ class Ananicy:
                     continue
 
             msg = "Disk {} not use cfq/bfq scheduler IOCLASS/IONICE will not work on it".format(
-                disk
-            )
+                disk)
             if self.verbose["check_disks_schedulers"]:
                 print(msg, flush=True)
 
@@ -486,29 +487,35 @@ class Ananicy:
                         check_freq = self.__get_val(col)
                         self.check_freq = float(check_freq)
                     if "cgroup_load=" in col:
-                        self.verbose["cgroup_load"] = self.__YN(self.__get_val(col))
+                        self.verbose["cgroup_load"] = self.__YN(
+                            self.__get_val(col))
                     if "type_load=" in col:
-                        self.verbose["type_load"] = self.__YN(self.__get_val(col))
+                        self.verbose["type_load"] = self.__YN(
+                            self.__get_val(col))
                     if "rule_load=" in col:
-                        self.verbose["rule_load"] = self.__YN(self.__get_val(col))
+                        self.verbose["rule_load"] = self.__YN(
+                            self.__get_val(col))
                     if "apply_nice=" in col:
-                        self.verbose["apply_nice"] = self.__YN(self.__get_val(col))
+                        self.verbose["apply_nice"] = self.__YN(
+                            self.__get_val(col))
                     if "apply_ioclass=" in col:
-                        self.verbose["apply_ioclass"] = self.__YN(self.__get_val(col))
+                        self.verbose["apply_ioclass"] = self.__YN(
+                            self.__get_val(col))
                     if "apply_ionice=" in col:
-                        self.verbose["apply_ionice"] = self.__YN(self.__get_val(col))
+                        self.verbose["apply_ionice"] = self.__YN(
+                            self.__get_val(col))
                     if "apply_sched=" in col:
-                        self.verbose["apply_sched"] = self.__YN(self.__get_val(col))
+                        self.verbose["apply_sched"] = self.__YN(
+                            self.__get_val(col))
                     if "apply_oom_score_adj=" in col:
                         self.verbose["apply_oom_score_adj"] = self.__YN(
-                            self.__get_val(col)
-                        )
+                            self.__get_val(col))
                     if "apply_cgroup=" in col:
-                        self.verbose["apply_cgroup"] = self.__YN(self.__get_val(col))
+                        self.verbose["apply_cgroup"] = self.__YN(
+                            self.__get_val(col))
                     if "check_disks_schedulers" in col:
                         self.verbose["check_disks_schedulers"] = self.__YN(
-                            self.__get_val(col)
-                        )
+                            self.__get_val(col))
 
     def load_cgroups(self):
         files = self.find_files(self.config_dir, ".*\\.cgroups")
@@ -521,13 +528,11 @@ class Ananicy:
                         self.get_cgroup_info(line)
                     except Failure as e:
                         str = "File: {}, Line: {}, Error: {}".format(
-                            file, line_number, e
-                        )
+                            file, line_number, e)
                         print(str, flush=True)
                     except json.decoder.JSONDecodeError as e:
                         str = "File: {}, Line: {}, Error: {}".format(
-                            file, line_number, e
-                        )
+                            file, line_number, e)
                         print(str, flush=True)
 
     def get_cgroup_info(self, line):
@@ -562,7 +567,8 @@ class Ananicy:
             "ionice": self.__check_ionice(line.get("ionice")),
             "sched": line.get("sched"),
             "rtprio": self.__check_rtprio(line.get("rtprio")),
-            "oom_score_adj": self.__check_oom_score_adj(line.get("oom_score_adj")),
+            "oom_score_adj":
+            self.__check_oom_score_adj(line.get("oom_score_adj")),
             "cgroup": line.get("cgroup"),
         }
 
@@ -577,13 +583,11 @@ class Ananicy:
                         self.get_type_info(line)
                     except Failure as e:
                         out = "File: {}, Line: {}, Error: {}".format(
-                            file, line_number, e
-                        )
+                            file, line_number, e)
                         print(out, flush=True)
                     except json.decoder.JSONDecodeError as e:
                         out = "File: {}, Line: {}, Error: {}".format(
-                            file, line_number, e
-                        )
+                            file, line_number, e)
                         print(out, flush=True)
 
     def get_rule_info(self, line):
@@ -602,13 +606,13 @@ class Ananicy:
                 raise Failure('"type": "{}" not defined'.format(_type))
             _type = self.types[_type]
             for attr in (
-                "nice",
-                "ioclass",
-                "ionice",
-                "sched",
-                "rtprio",
-                "oom_score_adj",
-                "cgroup",
+                    "nice",
+                    "ioclass",
+                    "ionice",
+                    "sched",
+                    "rtprio",
+                    "oom_score_adj",
+                    "cgroup",
             ):
                 tmp = _type.get(attr)
                 if not tmp:
@@ -626,7 +630,8 @@ class Ananicy:
             "ionice": self.__check_ionice(line.get("ionice")),
             "sched": line.get("sched"),
             "rtprio": self.__check_rtprio(line.get("rtprio")),
-            "oom_score_adj": self.__check_oom_score_adj(line.get("oom_score_adj")),
+            "oom_score_adj":
+            self.__check_oom_score_adj(line.get("oom_score_adj")),
             "type": line.get("type"),
             "cgroup": cgroup,
         }
@@ -642,13 +647,11 @@ class Ananicy:
                         self.get_rule_info(line)
                     except Failure as e:
                         out = "File: {}, Line: {}, Error: {}".format(
-                            file, line_number, e
-                        )
+                            file, line_number, e)
                         print(out, flush=True)
                     except json.decoder.JSONDecodeError as e:
                         out = "File: {}, Line: {}, Error: {}".format(
-                            file, line_number, e
-                        )
+                            file, line_number, e)
                         print(out, flush=True)
 
         if not self.rules:
@@ -714,11 +717,8 @@ class Ananicy:
             return
         tpid.apply_rules(rule, self.cgroups)
         if tpid.state != TPID.State.ALLSET:
-            print(
-                "Warn: Not all rules were applied on {}[{}/{}] = {}".format(
-                    tpid.cmd, tpid.pid, tpid.tpid, tpid.state
-                )
-            )
+            print("Warn: Not all rules were applied on {}[{}/{}] = {}".format(
+                tpid.cmd, tpid.pid, tpid.tpid, tpid.state))
 
     def run(self):
         while True:
@@ -735,7 +735,8 @@ class Ananicy:
 
     def dump_cgroups(self):
         cgroups_dict = {
-            cgroup: self.cgroups[cgroup].__dict__ for cgroup in self.cgroups
+            cgroup: self.cgroups[cgroup].__dict__
+            for cgroup in self.cgroups
         }
         print(json.dumps(cgroups_dict, indent=4), flush=True)
 
