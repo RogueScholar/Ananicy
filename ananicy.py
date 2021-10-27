@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
+import _thread
+import json
 import os
 import re
+import subprocess
 import sys
 import time
-import subprocess
-import json
-import _thread
-
-from enum import Enum, unique, Flag, auto
+from enum import Enum, Flag, auto, unique
 from time import sleep
 
 
