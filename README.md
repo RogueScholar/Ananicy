@@ -1,4 +1,4 @@
-# Ananicy
+# Ananicy - ANother Auto NICe-Y daemon
 
 ## Description
 
@@ -20,7 +20,7 @@ Use ananicy to fix these problems!
 
 ## Versions
 
-```
+```text
 X.Y.Z where
 X - Major version,
 Y - Script version - reset on each major update
@@ -35,7 +35,7 @@ To use ananicy you must have systemd installed.
 
 You can install ananicy manually by:
 
-```
+```shell-session
 $ git clone https://github.com/Nefelim4ag/Ananicy.git /tmp/ananicy
 $ cd /tmp/ananicy
 $ sudo make install
@@ -47,7 +47,7 @@ $ sudo make install
   [package.sh](https://raw.githubusercontent.com/Nefelim4ag/Ananicy/master/package.sh)
   in repo
 
-```
+```shell-session
 $ git clone https://github.com/Nefelim4ag/Ananicy.git
 $ ./Ananicy/package.sh debian
 $ sudo dpkg -i ./Ananicy/ananicy-*.deb
@@ -55,7 +55,7 @@ $ sudo dpkg -i ./Ananicy/ananicy-*.deb
 
 Enable
 
-```
+```shell-session
 $ sudo systemctl enable ananicy
 $ sudo systemctl start ananicy
 ```
@@ -66,15 +66,22 @@ Rules files should be placed under `/etc/ananicy.d/` directory and have
 `*.rules` extension. Inside .rules file every process is described on a separate
 line. General syntax is described below:
 
-```
-{ "name": "gcc", "type": "Heavy_CPU", "nice": 19, "ioclass": "best-effort", "ionice": 7, "cgroup": "cpu90" }
+```json
+{
+  "name": "gcc",
+  "type": "Heavy_CPU",
+  "nice": 19,
+  "ioclass": "best-effort",
+  "ionice": 7,
+  "cgroup": "cpu90"
+}
 ```
 
 All fields except `name` are optional.
 
 `name` used for match processes by exec bin name
 
-```
+```shell
 ~ basename $(sudo realpath /proc/1/exe)
 systemd
 ```
@@ -83,7 +90,7 @@ Currently matching by other things is not supported.
 
 You can check what Ananicy sees, by:
 
-```
+```shell
 ananicy dump proc
 ```
 
@@ -92,7 +99,7 @@ restart the service.
 
 Available ionice values:
 
-```
+```shell-session
 $ man ionice
 ```
 
@@ -125,7 +132,7 @@ About IO priority:
 
 Get ananicy output with journalctl:
 
-```
+```shell-session
 $ journalctl -efu ananicy.service
 ```
 
@@ -133,16 +140,16 @@ $ journalctl -efu ananicy.service
 
 If you see this error in the output
 
-```
+```text
 Jan 24 09:44:18 tony-dev ananicy[13783]: ERRO: Missing schedtool! Abort!
 ```
 
 Fix it in Ubuntu with
 
-```
+```shell
 sudo apt install schedtool
 ```
 
 ### Submitting new rules
 
-Please use pull request, thanks
+Please use [pull requests](https://github.com/Nefelim4ag/Ananicy/compare). Thank you.

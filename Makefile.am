@@ -42,7 +42,7 @@ ANANICYD_TYPES_INSTALL := $(patsubst $(srcdir)/%.types, $(ANANICYD)/%.types, $(A
 ANANICYD_GROUPS := $(shell find $(srcdir)/ananicy.d -type f -name "*.cgroups")
 ANANICYD_GROUPS_INSTALL := $(patsubst $(srcdir)/%.cgroups, $(ANANICYD)/%.cgroups, $(ANANICYD_GROUPS))
 
-ANANICY_SERVICE := $(DESTDIR)$(libdir)/systemd/system/ananicy.service
+ANANICY_SERVICE :=$(DESTDIR)$(libdir)/systemd/system/ananicy.service
 ANANICY_CONF := $(DESTDIR)$(sysconfdir)/ananicy.d/ananicy.conf
 ANANICY_BIN := $(DESTDIR)$(bindir)/ananicy
 
@@ -73,9 +73,9 @@ $(ANANICY_BIN): $(srcdir)/ananicy.py
 
 installdirs: mkinstalldirs
 	$(srcdir)/mkinstalldirs \
-	$(DESTDIR)$(bindir) $(DESTDIR)$(sysconfdir) \
-	$(DESTDIR)$(libdir) $(DESTDIR)$(infodir) \
-	$(DESTDIR)$(docdir) $(DESTDIR)$(mandir)
+		$(DESTDIR)$(bindir) $(DESTDIR)$(sysconfdir) \
+		$(DESTDIR)$(libdir) $(DESTDIR)$(infodir) \
+		$(DESTDIR)$(docdir) $(DESTDIR)$(mandir)
 
 .PHONY: install
 ## Install ananicy

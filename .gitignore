@@ -1,0 +1,114 @@
+# -*- mode: gitignore; -*-
+# Author: Peter J. Mello <admin@petermello.net>
+# Version: 1.1.0 (Using <https://semver.org/>)
+# Updated: 2020-06-06
+# SPDX-License-Identifier: MPL-2.0
+# See <https://git-scm.com/docs/gitignore> for more information.
+# ------------------------------------------------------------------------------
+#                           [Project specific files]
+/tmp
+debian/.debhelper
+debian/*.debhelper.log
+debian/debhelper-build-stamp
+debian/files
+debian/*.substvars
+# ------------------------------------------------------------------------------
+#                             [Filesystem cruft]
+*~
+.Trash-*
+.fuse_hidden*
+.nfs*
+.directory
+# ------------------------------------------------------------------------------
+#                               [Editors/IDEs]
+## CudaText project files are user-specific
+*.cuda-proj
+## Emacs
+\#*\#
+.\#*
+*.elc
+/.emacs.desktop
+/.emacs.desktop.lock
+auto-save-list
+tramp
+# Cask packages
+dist/
+.cask/
+### ELPA packages
+/elpa/
+### eshell
+/eshell/history
+/eshell/lastdir
+### Flycheck
+flycheck_*.el
+### flymake-mode
+*_flymake.*
+### Network security
+/network-security.data
+### Org-mode
+*_archive
+.org-id-locations
+### Projectile
+.projectile
+### RefTeX
+*.rel
+### server auth
+/server/
+### Workspace configuration
+.dir-locals.el
+## JetBrains (IntelliJ IDEA, PyCharm, etc.)
+.idea/*
+## All but five files are installation-specific
+!.idea/InspectionProfiles/profiles_settings.xml
+!.idea/*.iml
+!.idea/*.ipr
+!.idea/misc.xml
+!.idea/modules.xml
+!.idea/vcs.xml
+## Kate
+### Swap files
+.*.kate-swp
+.swp.*
+## Sublime Text
+### Workspace files are user-specific
+*.sublime-workspace
+### Sublime-GitHub package stores user's GitHub tokens here
+GitHub.sublime-settings
+### SFTP configuration/credentials files
+sftp-config.json
+sftp-config-alt*.json
+### Package control specific files
+Package Control.last-run
+Package Control.ca-list
+Package Control.ca-bundle
+Package Control.system-ca-bundle
+Package Control.cache/
+Package Control.ca-certs/
+Package Control.merged-ca-bundle
+Package Control.user-ca-bundle
+oscrypto-ca-bundle.crt
+bh_unicode_properties.cache
+### Cache files
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+## Visual Studio Code
+.history/
+.vscode/
+### All but four files are installation-specific
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+## Wing IDE
+### Separate file for user-specific project configuration
+*.wpu
+# ------------------------------------------------------------------------------
+#                   [General fatigue/stupidity insurance]
+## GPG secret keyring, abandon all hope (and self-respect) ye who commit this
+secring.*
+# ------------------------------------------------------------------------------
+#                            [VCS infrastructure]
+## Bazaar
+.bzr/
+.bzrignore
