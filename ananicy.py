@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import _thread
 import json
 import os
@@ -7,7 +6,10 @@ import re
 import subprocess
 import sys
 import time
-from enum import Enum, Flag, auto, unique
+from enum import auto
+from enum import Enum
+from enum import Flag
+from enum import unique
 from time import sleep
 
 
