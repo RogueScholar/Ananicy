@@ -167,21 +167,23 @@ About IO priority:
 
 Get ananicy output with journalctl:
 
-```bash
-journalctl -efu ananicy.service
+```shell-session
+$ journalctl -efu ananicy.service
 ```
 
 ### Missing `schedtool`
 
 If you see this error in the output
 
-  `... ananicy[.....]: ERRO: Missing schedtool! Abort!`
+```text
+Jan 24 09:44:18 tony-dev ananicy[13783]: ERRO: Missing schedtool! Abort!
+```
 
-The solution (on Debian-based distributions) is:
+Fix it in Ubuntu with
 
-  ```bash
-  sudo apt -y install schedtool
-  ```
+```shell
+sudo apt install schedtool
+```
 
 ### Submitting new rules
 
