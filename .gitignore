@@ -1,7 +1,7 @@
 # -*- mode: gitignore; -*-
 # Author: Peter J. Mello <admin@petermello.net>
-# Version: 1.1.0 (Using <https://semver.org/>)
-# Updated: 2020-06-06
+# Version: 1.1.1 (Using <https://semver.org/>)
+# Updated: 2024-09-23
 # SPDX-License-Identifier: MPL-2.0
 # See <https://git-scm.com/docs/gitignore> for more information.
 # ------------------------------------------------------------------------------
@@ -112,3 +112,8 @@ secring.*
 ## Bazaar
 .bzr/
 .bzrignore
+
+# ------------------------------------------------------------------------------
+#                              [Miscellaneous]
+##
+restyled-patch

@@ -69,7 +69,11 @@ class TPID:
         self.tpid = tpid
         self.prefix = "/proc/{}/task/{}/".format(pid, tpid)
         self.parent = "/proc/{}/".format(pid)
-        self.exe = os.path.realpath("/proc/{}/exe".format(pid))
+        self.exe = "/proc/{}/exe".format(pid)
+        try:
+            self.exe = os.path.realpath("/proc/{}/exe".format(pid))
+        except:
+            pass
         self.__oom_score_adj = self.prefix + "/oom_score_adj"
 
         self._stat = None
@@ -624,7 +628,17 @@ class Ananicy:
         if not self.cgroups.get(cgroup):
             cgroup = None
 
-        self.rules[name] = {
+        # might be best not to do this so that rules can be overwritten by the user
+        #if name in self.rules:
+        #    raise Failure(f'Duplicate name "{name}": ')
+
+        cmdlines = line.get("cmdlines")
+        if cmdlines:
+            cmdlines = frozenset(cmdlines)
+
+        key = (name, cmdlines)
+
+        self.rules[key] = {
             "nice": self.__check_nice(line.get("nice")),
             "ioclass": line.get("ioclass"),
             "ionice": self.__check_ionice(line.get("ionice")),
@@ -702,12 +716,19 @@ class Ananicy:
         return new_tpids
 
     def get_tpid_rule(self, tpid: TPID):
-        rule_name = tpid.cmd
-        rule = self.rules.get(rule_name)
-        if not rule:
-            rule_name = tpid.stat_name
-            rule = self.rules.get(rule_name)
-        return rule
+        rule_cmdlines = tpid.cmdline
+        for rule_name in [tpid.cmd, tpid.stat_name]:
+            for key in self.rules:
+                name,cmdlines = key
+                if name == rule_name:
+                    if cmdlines:
+                        for cl in cmdlines:
+                            if cl not in rule_cmdlines:
+                                break
+                        else:
+                            return self.rules[key]
+                    else:
+                        return self.rules[key]
 
     def process_tpid(self, tpid):
         if not tpid.exists():
@@ -722,12 +743,12 @@ class Ananicy:
 
     def run(self):
         while True:
-            # proc_map_update returns only new found processes
-            for tpid in self.proc_map_update():
-                try:
-                    self.process_tpid(tpid)
-                except Exception as exc:
-                    print("Error: {}".format(exc))
+            try:
+                # proc_map_update returns only new found processes
+                for tpid in self.proc_map_update():
+                        self.process_tpid(tpid)
+            except Exception as exc:
+                print("Error: {}".format(exc))
             sleep(self.check_freq)
 
     def dump_types(self):
@@ -741,7 +762,7 @@ class Ananicy:
         print(json.dumps(cgroups_dict, indent=4), flush=True)
 
     def dump_rules(self):
-        print(json.dumps(self.rules, indent=4), flush=True)
+        pprint.pp(self.rules)
 
     def dump_proc(self):
         self.proc_map_update()
@@ -767,7 +788,7 @@ class Ananicy:
             except FileNotFoundError:
                 continue
 
-        print(json.dumps(proc_dict, indent=4), flush=True)
+        pprint.pprint(proc_dict)
 
     def dump_autogroup(self):
         self.proc_map_update()
